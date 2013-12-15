@@ -19,22 +19,12 @@ def mapfn(k, v):
     B365A = Bet365 away win odds
     """
     for row in v:
-        home_price = float(row[23])
-        draw_price = float(row[24])
-        away_price = float(row[25])
-
-        if (home_price < away_price) and (row[6]=='H'):
-            yield 'total', home_price - 1.0
-        elif(home_price > away_price and row[6]=='A'):
-            yield 'total', away_price - 1.0
-        else:
-            yield 'total', -1.0
+        # completar
+        pass
 
 def reducefn(k, vs):
-    """
-    rellenar el codigo que falta
-    """    
-    return sum(vs)
+    # completar
+    pass
 
 def display(results):
     print results

@@ -10,7 +10,6 @@ Calcular la clasificacion final de la liga 12-13.
 
 def mapfn(k, v):
     """
-    rellenar el codigo que falta
     en notes.txt pone que el campo 6 es:
     FTR = Full Time Result (H=Home Win, D=Draw, A=Away Win)
     campos 4 y 5:
@@ -21,21 +20,12 @@ def mapfn(k, v):
     http://www.statto.com/football/stats/england/premier-league/2012-2013
     """
     for row in v:
-        if row[6]=='H':            
-            yield row[2], (3, 1, 0, 0, int(row[4]), int(row[5]))
-            yield row[3], (0, 0, 0, 1, int(row[5]), int(row[4]))
-        elif row[6]=='D':
-            yield row[2], (1, 0, 1, 0, int(row[4]), int(row[5]))
-            yield row[3], (1, 0, 1, 0, int(row[5]), int(row[4]))
-        elif row[6]=='A':
-            yield row[3], (3, 1, 0, 0, int(row[5]), int(row[4]))
-            yield row[2], (0, 0, 0, 1, int(row[4]), int(row[5]))
+       # completar
+       pass
 
 def reducefn(k, vs):
-    """
-    rellenar el codigo que falta
-    """    
-    return map(sum,zip(*vs))
+    # completar
+    pass
 
 def display(results):
     # ordernamos la clasificacion

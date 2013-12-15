@@ -12,7 +12,6 @@ Es irrelevante en este caso si se pago o no.
 
 def mapfn(k, v):
     """
-    rellenar el codigo que falta
     en notes.txt pone que el campo 9 es:
     campos 23, 24 y 25:
     B365H = Bet365 home win odds
@@ -20,13 +19,12 @@ def mapfn(k, v):
     B365A = Bet365 away win odds
     """
     for row in v:
-        yield 'best price', max([float(row[23]),float(row[24]),float(row[25])]) 
+        # completar
+        pass
 
 def reducefn(k, vs):
-    """
-    rellenar el codigo que falta
-    """    
-    return max(vs)
+    # completar
+    pass
 
 def display(results):
     print results

@@ -11,13 +11,12 @@ def mapfn(k, v):
     Los campos 4 y 5 son los goles
     """
     for row in v:
-        date_as_list = row[1].split
-        yield "%s%s" % (date_as_list[2], date_as_list[1]), (int(row[4])+int(row[5]), 1)
+        # completar
+        pass
 
 def reducefn(k, vs):
-    total_num_matches = sum(v[1] for v in vs)
-    goals             = sum(v[0] * v[1] for v in vs)
-    return (goals/float(total_num_matches), total_num_matches) 
+    # completar
+    pass
 
 def display(results):
     list_of_months = sorted(results.items())

@@ -191,6 +191,7 @@ El resultado que obtengo, basandome en los datos que tenia cuando escribi esto e
 Para experimentar un poco con Mincemeat podemos hacer lo mismo arrancando dos clientes (esto lo podriamos hacer con ejemplos con más datos, con los datos que tenemos estos se ejecutan bastante rapido y no da tiempo posiblemente a arrancar dos clientes). Debemos tener en cuenta que el servidor es quien debe acceder a los ficheros, así el path es relativo al servidor, pero el proceso se realiza en los clientes. Para verlo más claro pon un *print k* en el *mapfn* y/o en el *reducefn* y compruebalo. 
 
 #### Ejercicios:
+**Las soluciones a los ejercicios las podemos encontrar en la rama soluciones de este proyecto.**
 
 1. Calcular el total de partidos jugados por cada equipo y mostrar los que han jugado el máximo número posible o lo que es lo mismo, encuentra los equipos que han estado estas 4 temporadas permanentemente en la premier league. **code/01/01_exercise.py**.
 2. Calcular la clasificacion final de la liga 12-13. 3 puntos por victoria 1 punto por empate **code/01/02_exercise.py**.
@@ -241,7 +242,9 @@ Cliente:
 	$ mincemeat.py -p changeme localhost
 
 
-####Ejercicios:
+####Ejercicios
+**Las soluciones a los ejercicios las podemos encontrar en la rama soluciones de este proyecto.**
+
 1. Encontrar el mejor precio que podria haber sido pagado por un partido victoria local (columna 23), empate(24) y victoria visitante(25). Es irrelevante en este caso si se pago o no.
 2. Extender la solución anterior y listar en que fecha y entre que equipos y por que resultado fué. Hint: Aunque no sea lo más óptimo, podriamos emitir en el mapper los tres posibles resultados como una tupla del valor, y una cadena de texto con la descripción del resultado (fecha y quienes jugaban y porque resultado se pagaba ese precio). Pongo la solución que me sale a mi: 26.0 pagaron el 31/12/11 por un Man United 2 Blackburn 3.
 3. Considerando las columnas con los precios de una casa de apuestas, victoria local (columna 23), empate(24) y victoria visitante(25). Encontrar la posible apuesta que habria generado mas dinero. ¿Puedes tambien listar la fecha, los equipos involucrados y el resultado? Sorpresa?
@@ -304,6 +307,8 @@ Cliente:
 Esta vez hemos hecho un esfuerzo un poco mayor presentando los resultados.
 
 ####Ejercicios:
+**Las soluciones a los ejercicios las podemos encontrar en la rama soluciones de este proyecto.**
+
 1. Calcular la media de goles por partido por mes y año.
 
 
@@ -314,13 +319,19 @@ Voy a usar el resultado del ejercicio anterior.
 No copio el código aquí, pero mencionar que en este caso crea un CSV.  Este CSV lo mostraremos en una gráfica usando D3.js.
 
 Servidor:
-$ python code/04/generate_csv.py
+
+	$ python code/04/generate_csv.py
 
 Cliente:
-$ mincemeat.py -p changeme localhost
+
+	$ mincemeat.py -p changeme localhost
+	
+Esto generara un csv con los resultados en **web/data/monthly_average.csv**
 
 Entrar en el directorio web/ y escribir:
 
-$ python -m SimpleHTTPServer
+	$ python -m SimpleHTTPServer
 
-En el navegador se puede acceder en http://localhost:8000
+En el navegador se puede acceder en: 
+	
+	http://localhost:8000

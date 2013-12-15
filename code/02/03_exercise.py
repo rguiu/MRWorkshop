@@ -12,7 +12,6 @@ apuesta que habria generado mas dinero.
 
 def mapfn(k, v):
     """
-    rellenar el codigo que falta
     en notes.txt pone que el campo 6 es:
     FTR = Full Time Result (H=Home Win, D=Draw, A=Away Win)
     campos 23, 24 y 25:
@@ -21,18 +20,12 @@ def mapfn(k, v):
     B365A = Bet365 away win odds
     """
     for row in v:
-        posible_results = 'HDA'
-        result_index = posible_results.index(row[6])
-        price_to_apply = float(row[23 + result_index])
-       
-        desc = (' ').join([row[1],row[2],row[4],row[3],row[5]])
-        yield 'max value', (price_to_apply, desc)
+        # completar
+        pass
 
 def reducefn(k, vs):
-    """
-    rellenar el codigo que falta
-    """    
-    return max(vs,key=lambda x: x[0])
+    # completar
+    pass
 
 def display(results):
     print results

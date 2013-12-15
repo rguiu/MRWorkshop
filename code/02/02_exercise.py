@@ -13,19 +13,13 @@ jugaban y porque resultado se pagaba ese precio).
 """
 
 def mapfn(k, v):
-    """
-    rellenar el codigo que falta
-    """
     for row in v:
-        yield 'max price', (float(row[23]),' '.join([row[1],row[2],row[3],'H']))
-        yield 'max price', (float(row[24]),' '.join([row[1],row[2],row[3],'D']))
-        yield 'max price', (float(row[25]),' '.join([row[1],row[2],row[3],'A']))
+        # completar
+        pass
 
 def reducefn(k, vs):
-    """
-    rellenar el codigo que falta
-    """    
-    return max(vs,key=lambda x: x[0])
+    # completar
+    pass
 
 def display(results):
     print results

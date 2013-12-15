@@ -15,15 +15,10 @@ def mapfn(k, v):
     rellenar el codigo que falta
     """
     for row in v:
-        yield row[2], 1
-        yield row[3], 1
+        # rellenar el codigo
+        pass
 
 def reducefn(k, vs):
-    """
-    rellenar el codigo que falta.
-    Hint: El nombre del equipo local esta en el campo 2 del csv y el del
-    visitante en el 3
-    """    
     return sum(vs)
 
 def display(results):
