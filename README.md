@@ -1,12 +1,24 @@
 #MapReduce con mincemeat.py workshop
 
-Iniciarse con MapReduce puede ser confuso, pero el problema en gran medida es causado por la complejidad de los frameworks que lo implementan, Hadoop a la cabeza. Pero hay otros frameworks. He elegido Mincemeat, por su simplicidad, en unas líneas de código implementa Map Reduce y nos permite escribir ejemplos para entender algunas de las sutilezas de este modelo de programación.
+Este workshop es una introducción a MapReduce de forma práctica. Para ello haremos unos cuantos ejercicios, yo dejare el esqueleto de la solución y tu tendras que completarla. Al final daré la solución que yo implementé por si tubiste algún problema.
 
-##¿Que aprenderemos?
-Vamos a ser capaces de escribir mappers y reducers para realizar agrupaciones o sumarizaciones numéricas de nuestros datos. El equivalente a los agregados en SQL (sum, max, min, avg).
+Las secciones del Workshop seán.
 
-##	¿Que necesitamos saber?
-El código que vamos a escribir es sencillo, con nociones básicas de programación en cualquier lenguaje es suficiente. Conocimientos de Python son recomendables, ya que el código es en este lenguaje. 
+1. **Introducción a MapReduce**. En la versión escrita pondré poco sobre esta sección. Basicamente explicaré un poco que es y de donde viene MapReduce aunqueno me extenderé mucho en esta parte.
+2. **Algunos conceptos utiles de Python**. En principio cualquiera podria hacer este tutorial, voy a usar Python pero no es requisito imprescindible,cualquiera con conocimientos de programación podria hacer los ejemplos.
+3. **Ejercicios**. Esta es la parte más interesante y cubrirá la mayor parte del tiempo del workshop. Los ejercicios consistiran en tres bloques, yo pondre un ejemplo ya resuelto y despues dejare unos cuantos problemas similares para resolver.
+
+
+##El patrón Map Reduce 
+Copio la definición tal cual de la página de Wikipedia en inglés
+
+> MapReduce is a programming model for processing large data sets with a parallel, distributed algorithm on a cluster.[1]
+A MapReduce program is composed of a Map() procedure that performs filtering and sorting (such as sorting students by first name into queues, one queue for each name) and a Reduce() procedure that performs a summary operation (such as counting the number of students in each queue, yielding name frequencies). The "MapReduce System" (also called "infrastructure" or "framework") orchestrates by marshalling the distributed servers, running the various tasks in parallel, managing all communications and data transfers between the various parts of the system, and providing for redundancy and fault tolerance.
+
+> The model is inspired by the map and reduce functions commonly used in functional programming,[2] although their purpose in the MapReduce framework is not the same as in their original forms.[3] Furthermore, the key contributions of the MapReduce framework are not the actual map and reduce functions, but the scalability and fault-tolerance achieved for a variety of applications by optimizing the execution engine once.
+
+[ver más](http://en.wikipedia.org/wiki/MapReduce)
+
 
 ##Herramientas de programación funcional en Python
 
@@ -100,15 +112,6 @@ Y otro artículo que habla de Iterables y Generadores:
 
 Podemos encontrar cientos de artículos que explican Iterators, Generators y Yield en profundidad con solo unos rezos a San Google.
 
-##El patrón Map Reduce 
-Copio la definición tal cual de la página de Wikipedia en inglés
-
-> MapReduce is a programming model for processing large data sets with a parallel, distributed algorithm on a cluster.[1]
-A MapReduce program is composed of a Map() procedure that performs filtering and sorting (such as sorting students by first name into queues, one queue for each name) and a Reduce() procedure that performs a summary operation (such as counting the number of students in each queue, yielding name frequencies). The "MapReduce System" (also called "infrastructure" or "framework") orchestrates by marshalling the distributed servers, running the various tasks in parallel, managing all communications and data transfers between the various parts of the system, and providing for redundancy and fault tolerance.
-
-> The model is inspired by the map and reduce functions commonly used in functional programming,[2] although their purpose in the MapReduce framework is not the same as in their original forms.[3] Furthermore, the key contributions of the MapReduce framework are not the actual map and reduce functions, but the scalability and fault-tolerance achieved for a variety of applications by optimizing the execution engine once.
-
-[ver más](http://en.wikipedia.org/wiki/MapReduce)
 
 ###mincemeat.py
 mincemeat.py es una implementación muy fácil de usar de MapReduce en python. [Ver su página](https://github.com/michaelfairley/mincemeatpy).
@@ -138,7 +141,7 @@ En nuestro caso podemos simmplemente filtrar por temporada usando esta estrategi
 
 ##Ejemplos de MapReduce
 
-### 1. Calculando totales(SQL SUM&COUNT)
+### 1. Calculando totales(SQL SUM&COUNT)
 
 Para empezar un ejemplo sencillo. Vamos a calcular el número de partidos en total jugados por cualquier equipo. 
 
