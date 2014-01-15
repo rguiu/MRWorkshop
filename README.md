@@ -2,7 +2,7 @@
 
 Este workshop es una introducción a MapReduce de forma práctica. Para ello haremos unos cuantos ejercicios, yo dejare el esqueleto de la solución y tu tendras que completarla. Al final daré la solución que yo implementé por si tubiste algún problema.
 
-Las secciones del Workshop seán.
+He dividido el workshop en las siguientes secciones:
 
 1. **Introducción a MapReduce**. En la versión escrita pondré poco sobre esta sección. Basicamente explicaré un poco que es y de donde viene MapReduce aunqueno me extenderé mucho en esta parte.
 2. **Algunos conceptos utiles de Python**. En principio cualquiera podria hacer este tutorial, voy a usar Python pero no es requisito imprescindible,cualquiera con conocimientos de programación podria hacer los ejemplos.
@@ -10,17 +10,116 @@ Las secciones del Workshop seán.
 
 
 ##El patrón Map Reduce 
-Copio la definición tal cual de la página de Wikipedia en inglés
+MapReduce es un modelo de programación usado para procesar gran cantidad de datos de forma paralela y distribuida en un cluster de máquinas.
 
-> MapReduce is a programming model for processing large data sets with a parallel, distributed algorithm on a cluster.[1]
-A MapReduce program is composed of a Map() procedure that performs filtering and sorting (such as sorting students by first name into queues, one queue for each name) and a Reduce() procedure that performs a summary operation (such as counting the number of students in each queue, yielding name frequencies). The "MapReduce System" (also called "infrastructure" or "framework") orchestrates by marshalling the distributed servers, running the various tasks in parallel, managing all communications and data transfers between the various parts of the system, and providing for redundancy and fault tolerance.
+Un programa de MapReduce se compone de una función Map() que ejecuta un proceso sobre cada elemento que queremos tratar y un Reduce() que une y consolida esos resultados. 
 
-> The model is inspired by the map and reduce functions commonly used in functional programming,[2] although their purpose in the MapReduce framework is not the same as in their original forms.[3] Furthermore, the key contributions of the MapReduce framework are not the actual map and reduce functions, but the scalability and fault-tolerance achieved for a variety of applications by optimizing the execution engine once.
+### Historia
+En 2004 Google publico un artículo académico revelando el modelo de programación MapReduce:
 
-[ver más](http://en.wikipedia.org/wiki/MapReduce)
+[Publicación original MapReduce por Google](http://research.google.com/archive/mapreduce.html). 
+
+Aunque no van a ser muy importantes para nosotros hoy debemos mencionar otros dos artículos publicados por Google:
+
+[Google File System (GFS)](http://research.google.com/archive/gfs.html): GFS es un sistema de ficheros diseñado y usado por Google para funcionar de forma distribuida.
+
+[Bigtable](http://research.google.com/archive/bigtable.html): Bigtable es un sistema de almacenamiento de datos que funciona sobre GFS. Tiene ciertas similitudes con las bases de datos columnares aunque no entra dentro de esta categoria.
+
+Basandose en estos tres documentos publicados por Google [Doug Cutting](http://en.wikipedia.org/wiki/Doug_Cutting) creó Hadoop.
+
+Nosotros no vamos a profundizar en todo esto y nos vamos a centrar en lo que es MapReduce en si. Para ello usaremos un framework mucho mas ligero que Hadoop llamado [mincemeat.py](https://github.com/michaelfairley/mincemeatpy).
+
+Pero antes de lanzarnos a por MapReduce vamos a repasar algunas cosillas de Python.
 
 
-##Herramientas de programación funcional en Python
+## Repaso de Python
+
+### List Comprehensions
+[Documentación oficial](http://docs.python.org/2/tutorial/datastructures.html#list-comprehensions)
+
+[1] En matemáticas podemos declarar una lista de las siguientes formas (por ejemplo):
+
+	   S = {x² : x en {0 ... 9}}
+       V = (1, 2, 4, 8, ..., 2¹²)
+       M = {x | x en S y x par}
+
+Esto lo podemos hacer en python de la siguiente forma en la consola:
+
+	$ python	
+	>>> S = [x**2 for x in range(10)]
+    >>> V = [2**i for i in range(13)]
+    >>> M = [x for x in S if x % 2 == 0]
+    >>> 
+    >>> print S; print V; print M
+    
+Objtendremos en la consola:
+    
+    [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+    [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096]
+    [0, 4, 16, 36, 64]
+
+
+###Python iterables, generators and the keyword yield
+####Iterables
+Cuando iteramos sobre una lista en python llamamos a sus elementos uno a uno:
+
+	$ python
+	>>> list_of_numbers = [1, 3, 5]
+	>>> for i in list_of_numbers:
+	...    print i
+	...
+	1
+	3
+	5
+
+Todo lo que podemos iterar con un for in es un iterable. A pesar de su utilidad tiene un problema y es que los iterables guardan en memoria toda la lista y esto puede ser contraproducente si la lista es muy grande. Para eso existen los generadores de los que hablamos ahora.
+
+####Generators
+Los generators son como los iterators pero estos se pueden iterar una sola vez. Esto es porque no guardan los valores en memoria sino que los generan bajo demanda:
+
+	$ python
+	>>> my_generator = (x*x for x in range(3))
+	>>> for i in my_generator:
+	...    print i
+	...
+	0
+	1
+	4
+
+
+Como se ve en el ejemplo generator son muy similares. De hecho en el ejemplo solo se aprecia la diferencia de usar () en vez de []. Pero debemos recordar que no podemos hacer un nuevo loop for in en el generator ya que estos solo se pueden pasar una vez.
+
+####Yield
+
+El yield funciona de forma muy similar a un return pero en su caso devuelve un generador
+
+	$ python
+	>>> def countdown_generator(x):
+	...   for i in range(x,0,-1):
+	...     yield i
+	...
+	>>> for i in countdown_generator(3):
+	...   print i
+	...
+	3
+	2
+	1
+
+El generador es util para usar menos memoria, ademas cuesta menos inicializar que una lista iterable, por ejemplo. Pero en cada ciclo del loop tiene que efectuar las operaciones que no hizo al inicializar, así que iterar en un generador será más lento.
+
+En este link en StackOverflow explican esto en ingles:
+
+[http://stackoverflow.com/questions/231767/the-python-yield-keyword-explained](http://stackoverflow.com/questions/231767/the-python-yield-keyword-explained)
+
+Y otro artículo que habla de Iterables y Generadores:
+
+[http://www.learningpython.com/2009/02/23/iterators-iterables-and-generators-oh-my/](http://www.learningpython.com/2009/02/23/iterators-iterables-and-generators-oh-my/)
+
+Podemos encontrar cientos de artículos que explican Iterators, Generators y Yield en profundidad buscando en Google.
+
+
+###Herramientas de programación funcional en Python
+[Documentación oficial](http://docs.python.org/2/tutorial/datastructures.html#functional-programming-tools)
 
 Voy a empezar por poner algunas notas sobre Python. Es interesante para gente que no este familiarizada con Python. Si ya estás familiarizado con Python o si ya conoces estos conceptos de otros lenguajes puedes saltar a la parte donde escribo los ejemplos.
 
@@ -47,70 +146,30 @@ Aplica una función a todos los elementos de una lista.
 	>>> reduce(add, range(1, 11))
 	55
 
-Otras funciones similares. 
 
-`sum`,  `filter`, `zip`
+`sum(secuencia)`
 
-Más:
-<http://docs.python.org/2/tutorial/datastructures.html>
-
-##Python iterables, generators and the keyword yield
-###Iterables
-Cuando iteramos sobre una lista en python llamamos a sus elementos uno a uno:
+Devuelve la suma de los elementos de una lista
 
 	$ python
-	>>> list_of_numbers = [1, 3, 5]
-	>>> for i in list_of_numbers:
-	...    print i
-	...
-	1
-	3
-	5
-
-Todo lo que podemos iterar con un for in es un iterable. A pesar de su utilidad tiene un problema y es que los iterables guardan en memoria toda la lista y esto puede ser contraproducente si la lista es muy grande. Para eso existen los generadores de los que hablamos ahora.
-
-###Generators
-Los generators son como los iterators pero estos se pueden iterar una sola vez. Esto es porque no guardan los valores en memoria sino que los generan bajo demanda:
-
-	$ python
-	>>> my_generator = (x*x for x in range(3))
-	>>> for i in my_generator:
-	...    print i
-	...
-	0
-	1
-	4
+	>>> sum(range(9))
+	36
 
 
-Como se ve en el ejemplo generator son muy similares. De hecho en el ejemplo solo se aprecia la diferencia de usar () en vez de []. Pero debemos recordar que no podemos hacer un nuevo loop for in en el generator ya que estos solo se pueden pasar una vez.
+`zip(secuencia1, secuencia2, secuencia3, ....)`
 
-###Yield
+Devuelve una serie de listas, en la que la primera tiene todos los elementos primeros de las listas pasadas como parametros, la segunda tiene los segundos etc.El numero de listas resultantes es el numero de elementos de la lista mas pequeña pasada como argumento.
 
-El yield funciona de forma muy similar a un return pero en su caso devuelve un generador
-
-	$ python
-	>>> def countdown_generator(x):
-	...   for i in range(x,0,-1):
-	...     yield i
-	...
-	>>> for i in countdown_generator(3):
-	...   print i
-	...
-	3
-	2
-	1
-
-El generador es util para usar menos memoria, ademas cuesta menos inicializar que una lista iterable, por ejemplo. Pero en cada ciclo del loop tiene que efectuar las operaciones que no hizo al inicializar, así que iterar en un generador será más lento.
-
-En este link en StackOverflow explican esto en ingles:
-
-[http://stackoverflow.com/questions/231767/the-python-yield-keyword-explained](http://stackoverflow.com/questions/231767/the-python-yield-keyword-explained)
-
-Y otro artículo que habla de Iterables y Generadores:
-
-[http://www.learningpython.com/2009/02/23/iterators-iterables-and-generators-oh-my/](http://www.learningpython.com/2009/02/23/iterators-iterables-and-generators-oh-my/)
-
-Podemos encontrar cientos de artículos que explican Iterators, Generators y Yield en profundidad con solo unos rezos a San Google.
+Vamos a verlo con un ejemplo:
+    
+    $ python
+    >>> a = [1,2,3,4]
+    >>> b = [5,6,7]
+    >>> c = [0,8,9,1]
+    >>> 
+    >>> zip(a,b,c)
+    [(1, 5, 0), (2, 6, 8), (3, 7, 9)]
+ 
 
 
 ###mincemeat.py
@@ -338,3 +397,7 @@ Entrar en el directorio web/ y escribir:
 En el navegador se puede acceder en: 
 	
 	http://localhost:8000
+
+
+
+[1]: http://www.secnetix.de/olli/Python/list_comprehensions.hawk
